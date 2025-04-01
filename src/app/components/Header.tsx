@@ -3,10 +3,11 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useMemo } from "react";
+import { User } from "../types/types";
 
 const Header = () => {
   const { data: session } = useSession();
-  const user = useMemo(() => session?.user, [session]);
+  const user = useMemo(() => session?.user as User, [session]);
 
   return (
     <header className="bg-slate-600 text-gray-100 shadow-lg">
