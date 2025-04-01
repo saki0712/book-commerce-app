@@ -12,3 +12,11 @@ export const getAllBooks = async () => {
   });
   return allBooks;
 };
+
+export const getBookContents = async (contentId: string) => {
+  const bookContents = await client.getListDetail<BookType>({
+    endpoint: "ebook",
+    contentId,
+  });
+  return bookContents;
+};
