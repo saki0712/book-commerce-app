@@ -1,24 +1,60 @@
 "use client";
 
 import Image from "next/image";
-import { BookType } from "../types/types";
-import { useMemo, useState } from "react";
+import { BookType, User } from "../types/types";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import PurchaseModal from "./PurchaseModal";
 
 type BookProps = {
   book: BookType;
+  isPurchased: boolean;
 };
 
-const Book = ({ book }: BookProps) => {
+const Book = ({ book, isPurchased }: BookProps) => {
   const [showModal, setShowModal] = useState(false);
   const { data: session } = useSession();
-  const user = useMemo(() => session?.user, [session]);
+  const user = session?.user as User;
   const router = useRouter();
 
+  const startCheckout = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/stripe/session`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: book.title,
+            price: Math.round(book.price * 100),
+            userId: user?.id,
+            bookId: book.id,
+          }),
+        }
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        console.error("Checkout failed:", data.error);
+        alert("Failed to start checkout");
+        return;
+      }
+
+      if (data && data.checkout_url) {
+        router.push(data.checkout_url);
+      }
+    } catch (err) {
+      console.error("Checkout failed:", err);
+      alert("Something went wrong. Please try again.");
+    }
+  };
+
   const handlePurchaseClick = () => {
-    setShowModal(true);
+    if (!isPurchased) {
+      setShowModal(true);
+      return;
+    }
+    alert("You already own this book.");
   };
 
   const handleCancel = () => {
@@ -26,12 +62,13 @@ const Book = ({ book }: BookProps) => {
   };
 
   const handlePurchaseConfirm = () => {
+    setShowModal(false);
     if (!user) {
-      setShowModal(false);
+      alert("You need to log in to continue.");
       router.push("/login");
       return;
     }
-    // pay by Stripe
+    startCheckout();
   };
 
   return (
