@@ -2,7 +2,11 @@ import { getBookContents } from "@/app/lib/microcms/client";
 import Image from "next/image";
 import React from "react";
 
-const BookContents = async ({ params }: { params: { bookId: string } }) => {
+const BookContents = async ({
+  params,
+}: {
+  params: Promise<{ bookId: string }>;
+}) => {
   try {
     const { bookId } = await params;
     const book = await getBookContents(bookId);
