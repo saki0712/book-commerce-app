@@ -36,7 +36,7 @@ export default async function ProfilePage() {
   }
 
   const purchasesData = await getPurchasesData(user.id);
-  if (!purchasesData) {
+  if (purchasesData === null) {
     return (
       <div className="text-center mt-10 text-red-600">
         Failed to load purchase history. Please try again later.
