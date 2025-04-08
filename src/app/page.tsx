@@ -53,6 +53,7 @@ export default async function Home() {
             key={book.id}
             book={book}
             isPurchased={purchaseBookIds.includes(book.id)}
+            user={user}
           />
         ))}
       </main>
@@ -65,7 +66,7 @@ export default async function Home() {
         Book Commerce
       </h2>
       {contents.map((book: BookType) => (
-        <Book key={book.id} book={book} isPurchased={false} />
+        <Book key={book.id} book={book} isPurchased={false} user={user} />
       ))}
     </main>
   );
