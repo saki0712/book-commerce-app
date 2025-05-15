@@ -1,49 +1,53 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { User } from "../types/types";
 import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "../lib/next-auth/options";
+import { User } from "../types/types";
 
 const Header = async () => {
   const session = await getServerSession(nextAuthOptions);
   const user = session?.user as User;
 
   return (
-    <header className="bg-slate-600 text-gray-100 shadow-lg">
-      <nav className="flex items-center justify-between p-4">
-        <Link href={"/"} className="text-xl font-bold">
-          Book Commerce
+    <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+      <nav className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
+        <Link href="/" className="flex items-center gap-2">
+          <Image src="/logo.png" alt="ebook Logo" width={36} height={36} />
+          <span className="text-lg font-semibold text-gray-800">ebook</span>
         </Link>
-        <div className="flex items-center gap-1">
+
+        <div className="flex items-center gap-6">
           <Link
             href="/"
-            className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+            className="text-gray-600 hover:text-green-600 transition-colors duration-200 text-sm"
           >
             Home
           </Link>
+
           <Link
-            href={user ? "/profile" : "/login"} // "/api/auth/signin"
-            className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+            href={user ? "/profile" : "/login"}
+            className="text-gray-600 hover:text-green-600 transition-colors duration-200 text-sm"
           >
             {user ? "Profile" : "Login"}
           </Link>
 
           {user && (
             <Link
-              href={"/api/auth/signout"}
-              className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+              href="/api/auth/signout"
+              className="text-gray-600 hover:text-red-500 transition-colors duration-200 text-sm"
             >
               Logout
             </Link>
           )}
 
-          <Link href={`/profile`}>
+          <Link href="/profile">
             <Image
-              width={50}
-              height={50}
-              alt="profile_icon"
               src={user?.image || "/default_icon.png"}
+              alt="User Icon"
+              width={32}
+              height={32}
+              className="rounded-full border border-gray-300 hover:scale-105 transition-transform"
             />
           </Link>
         </div>
