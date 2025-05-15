@@ -1,9 +1,9 @@
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { nextAuthOptions } from "../lib/next-auth/options";
-import { BookType, Purchase, User } from "../types/types";
+import { Purchase, User } from "../types/types";
 import { getBookContents } from "../lib/microcms/client";
-import PurchasedBookDetails from "../components/PurchasedBookDetails";
+import PurchasedBookGrid from "../components/PurchasedBookGrid";
 
 async function getPurchasesData(userId: string): Promise<Purchase[] | null> {
   try {
@@ -15,8 +15,7 @@ async function getPurchasesData(userId: string): Promise<Purchase[] | null> {
       console.error("Failed to fetch purchases");
       return null;
     }
-    const purchasesData = await response.json();
-    return purchasesData;
+    return await response.json();
   } catch (err) {
     console.error("Error fetching purchase data:", err);
     return null;
@@ -29,7 +28,7 @@ export default async function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="text-center mt-10 text-gray-600">
+      <div className="text-center mt-32 text-gray-500 text-sm">
         You must be logged in to view your profile.
       </div>
     );
@@ -38,43 +37,48 @@ export default async function ProfilePage() {
   const purchasesData = await getPurchasesData(user.id);
   if (purchasesData === null) {
     return (
-      <div className="text-center mt-10 text-red-600">
-        Failed to load purchase history. Please try again later.
+      <div className="text-center mt-32 text-red-500">
+        Failed to load your purchase history. Please try again later.
       </div>
     );
   }
 
-  const purchasedBooksDetails: BookType[] = await Promise.all(
-    purchasesData.map((purchase) => getBookContents(purchase.bookId))
+  const purchasedBooksDetails = await Promise.all(
+    purchasesData.map(async (purchase) => {
+      const book = await getBookContents(purchase.bookId);
+      return {
+        ...book,
+        purchaseDate: purchase.createdAt,
+      };
+    })
   );
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-xl font-bold mb-4">Profile</h1>
-
-      <div className="bg-white shadow-md rounded p-4">
-        <div className="flex items-center">
-          <Image
-            priority
-            src={user.image || "/default_icon.png"}
-            alt="user profile_icon"
-            width={60}
-            height={60}
-            className="rounded-t-md"
-          />
-          <h2 className="text-lg ml-4 font-semibold">{user.name}</h2>
+    <div className="max-w-7xl mx-auto px-4 py-12 text-gray-800">
+      <div className="bg-white shadow-md rounded-xl p-6 flex items-center gap-6 mb-12">
+        <Image
+          src={user.image || "/default_icon.png"}
+          alt="User avatar"
+          width={72}
+          height={72}
+          className="rounded-full border border-gray-300"
+        />
+        <div>
+          <p className="text-xl font-semibold">{user.name}</p>
+          <p className="text-sm text-gray-500">{user.email}</p>
         </div>
       </div>
 
-      <span className="font-medium text-lg mb-4 mt-4 block">Your Library</span>
-      <div className="flex flex-wrap gap-6">
-        {purchasedBooksDetails.map((purchasedBookDetails: BookType) => (
-          <PurchasedBookDetails
-            key={purchasedBookDetails.id}
-            purchasedBookDetails={purchasedBookDetails}
-          />
-        ))}
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+          Your Library
+        </h2>
+        <span className="text-sm text-gray-400">
+          {purchasedBooksDetails.length} books
+        </span>
       </div>
+
+      <PurchasedBookGrid books={purchasedBooksDetails} />
     </div>
   );
 }

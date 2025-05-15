@@ -1,8 +1,8 @@
-import { getServerSession } from "next-auth";
-import Book from "./components/Book";
 import { getAllBooks } from "./lib/microcms/client";
-import { BookType, Purchase, User } from "./types/types";
+import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "./lib/next-auth/options";
+import BookGrid from "./components/BookGrid";
+import { User, Purchase } from "./types/types";
 
 async function getPurchaseBookIds(userId: string): Promise<string[] | null> {
   try {
@@ -25,18 +25,18 @@ async function getPurchaseBookIds(userId: string): Promise<string[] | null> {
 export default async function Home() {
   const { contents } = await getAllBooks();
   const session = await getServerSession(nextAuthOptions);
-  const user = session?.user as User;
+  const user = (session?.user as User) || null;
 
   if (user) {
-    const purchaseBookIds = await getPurchaseBookIds(user.id);
+    const purchasedIds = await getPurchaseBookIds(user.id);
 
-    if (purchaseBookIds === null) {
+    if (purchasedIds === null) {
       return (
-        <main className="flex flex-col items-center justify-center mt-32 text-center">
+        <main className="flex flex-col items-center justify-center mt-32 text-center px-4">
           <h2 className="text-2xl font-bold text-red-600 mb-4">
             Failed to load your purchase history
           </h2>
-          <p className="text-gray-700">
+          <p className="text-gray-600 max-w-md">
             Please refresh the page or contact support if the problem persists.
           </p>
         </main>
@@ -44,30 +44,18 @@ export default async function Home() {
     }
 
     return (
-      <main className="flex flex-wrap justify-center items-center md:mt-32 mt-20">
-        <h2 className="text-center w-full font-bold text-3xl mb-2">
-          Book Commerce
+      <main className="max-w-7xl mx-auto px-4 py-12">
+        <h2 className="text-sm text-gray-500 uppercase tracking-widest mb-6">
+          Featured Books
         </h2>
-        {contents.map((book: BookType) => (
-          <Book
-            key={book.id}
-            book={book}
-            isPurchased={purchaseBookIds.includes(book.id)}
-            user={user}
-          />
-        ))}
+        <BookGrid books={contents} user={user} purchasedIds={purchasedIds} />
       </main>
     );
   }
 
   return (
-    <main className="flex flex-wrap justify-center items-center md:mt-32 mt-20">
-      <h2 className="text-center w-full font-bold text-3xl mb-2">
-        Book Commerce
-      </h2>
-      {contents.map((book: BookType) => (
-        <Book key={book.id} book={book} isPurchased={false} user={user} />
-      ))}
+    <main className="max-w-7xl mx-auto px-4 py-12">
+      <BookGrid books={contents} user={user} purchasedIds={[]} />
     </main>
   );
 }
