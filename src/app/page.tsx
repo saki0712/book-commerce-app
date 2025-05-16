@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { nextAuthOptions } from "./lib/next-auth/options";
 import BookGrid from "./components/BookGrid";
 import { User, Purchase } from "./types/types";
+import Slideshow from "./components/Slideshow";
 
 async function getPurchaseBookIds(userId: string): Promise<string[] | null> {
   try {
@@ -45,6 +46,7 @@ export default async function Home() {
 
     return (
       <main className="max-w-7xl mx-auto px-4 py-12">
+        <Slideshow />
         <h2 className="text-sm text-gray-500 uppercase tracking-widest mb-6">
           Featured Books
         </h2>
@@ -55,6 +57,10 @@ export default async function Home() {
 
   return (
     <main className="max-w-7xl mx-auto px-4 py-12">
+      <Slideshow />
+      <h2 className="text-sm text-gray-500 uppercase tracking-widest mb-6">
+        Featured Books
+      </h2>
       <BookGrid books={contents} user={user} purchasedIds={[]} />
     </main>
   );
