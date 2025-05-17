@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env.local
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    env_file:
+      - .env.local
+    depends_on:
+      - db
+
+  studio:
+    build:
+      context: .
+      dockerfile: Dockerfile.studio
+    command: npx prisma studio
+    ports:
+      - "5555:5555"
+    volumes:
+      - .:/app
+    env_file:
+      - .env.local
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
