@@ -34,6 +34,7 @@ Check out the deployed app:
 - **Authentication**: [NextAuth.js](https://next-auth.js.org/)
 - **CMS**: [microCMS](https://microcms.io/)
 - **Payments**: [Stripe](https://stripe.com/)
+- **Dev Environment**: Docker & Docker Compose for local development
 
 ---
 
