@@ -3,12 +3,6 @@
 A modern and minimal eBook store built with **Next.js**, **Tailwind CSS**, **Stripe**, **microCMS**, and **NextAuth.js**.  
 Browse, purchase, and manage your digital library with ease.
 
-## 🖼️ Screenshot
-
-![screenshot](./public/screenshot.png)
-
----
-
 ## 🚀 Features
 
 - 🔍 Browse and filter eBooks
@@ -29,11 +23,11 @@ Check out the deployed app:
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Next.js](https://nextjs.org/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Authentication**: [NextAuth.js](https://next-auth.js.org/)
-- **CMS**: [microCMS](https://microcms.io/)
-- **Payments**: [Stripe](https://stripe.com/)
+- **Framework**: Next.js
+- **Styling**: Tailwind CSS
+- **Authentication**: NextAuth.js
+- **CMS**: microCMS
+- **Payments**: Stripe
 - **Dev Environment**: Docker & Docker Compose for local development
 
 ---
