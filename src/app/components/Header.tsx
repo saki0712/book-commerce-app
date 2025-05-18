@@ -10,7 +10,7 @@ const Header = async () => {
   const user = session?.user as User;
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+    <header className="bg-white sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.png" alt="ebook Logo" width={36} height={36} />

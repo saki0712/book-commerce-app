@@ -29,7 +29,7 @@ const slides = [
 
 const Slideshow = () => {
   return (
-    <section className="w-full py-6">
+    <section className="w-full -mt-4 pb-6">
       <Swiper
         modules={[Pagination, Autoplay]}
         pagination={{ clickable: true }}
