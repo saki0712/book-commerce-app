@@ -38,7 +38,7 @@ const PurchaseModal = ({ book, onCancel, onConfirm }: PurchaseModalProps) => {
         <div className="mt-6">
           <button
             onClick={onConfirm}
-            className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded w-full max-w-[450px]"
+            className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded w-full max-w-[450px]"
           >
             Proceed to check out
           </button>
