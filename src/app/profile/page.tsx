@@ -45,13 +45,18 @@ export default async function ProfilePage() {
 
   const purchasedBooksDetails = await Promise.all(
     purchasesData.map(async (purchase) => {
-      const book = await getBookContents(purchase.bookId);
-      return {
-        ...book,
-        purchaseDate: purchase.createdAt,
-      };
+      try {
+        const book = await getBookContents(purchase.bookId);
+        return {
+          ...book,
+          purchaseDate: purchase.createdAt,
+        };
+      } catch {
+        return null;
+      }
     })
   );
+  const validBooks = purchasedBooksDetails.filter((book) => book !== null);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12 text-gray-800">
@@ -78,7 +83,14 @@ export default async function ProfilePage() {
         </span>
       </div>
 
-      <PurchasedBookGrid books={purchasedBooksDetails} />
+      {purchasedBooksDetails.length !== validBooks.length && (
+        <p className="text-sm text-red-400 mb-4">
+          Some purchased books are no longer available. Contact support if you
+          need help.
+        </p>
+      )}
+
+      <PurchasedBookGrid books={validBooks} />
     </div>
   );
 }
