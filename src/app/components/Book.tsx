@@ -102,7 +102,7 @@ const Book = ({ book, isPurchased, user }: BookProps) => {
               ${
                 isPurchased
                   ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                  : "bg-green-600 text-white hover:bg-green-700"
+                  : "bg-emerald-500 text-white hover:bg-emerald-600"
               }`}
             disabled={isPurchased}
           >
