@@ -5,10 +5,10 @@ Browse, purchase, and manage your digital library with ease.
 
 ## 🚀 Features
 
-- 🔍 Browse and filter eBooks
+- 🔍 Browse, search, and filter eBooks
 - 🛒 Purchase eBooks securely with Stripe
 - 🧾 View your purchase history in your profile
-- 🧑‍💻 GitHub login via NextAuth
+- 🧑‍💻 Google & GitHub login via NextAuth
 - 🎞️ Slideshow banner for promotions
 - 💎 Unified, clean UI using Tailwind CSS
 
