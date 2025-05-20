@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import { NextAuthProvider } from "./lib/next-auth/provider";
 import { Suspense } from "react";
 import LoadingSpinner from "./loading";
+import Footer from "./components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <Header />
           <Suspense fallback={<LoadingSpinner />}>{children}</Suspense>
+          <Footer />
         </NextAuthProvider>
       </body>
     </html>
